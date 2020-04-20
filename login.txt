@@ -1,0 +1,3 @@
+admin t6q79uct
+neadmin 1
+root 2
