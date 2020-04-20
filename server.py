@@ -28,10 +28,6 @@ def status_view():
         'time': datetime.now().strftime('%d/%m/%Y %H:%M:%S')
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 4a978d8f5977865bb15432724e264431fdba9863
 @app.route("/users")
 def users_view():
     return {'users': users}
