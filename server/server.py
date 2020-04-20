@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 import time
 from datetime import datetime
 
@@ -6,20 +6,19 @@ from flask import Flask, request
 
 app = Flask(__name__)
 messages = [
-	{"username":"admin", "text":"Welcome!", "time":time.time()},
-	{"username":"neadmin", "text":"Иди нахуй", "time":time.time()},
-	{"username":"root", "text":"root", "time":time.time()}
+    {"username": "Jack", "text": "Hello!", "time": time.time()},
+    {"username": "Mary", "text": "Hi, Jack", "time": time.time()},
 ]
 users = {
-	'admin':'t6q79uct',
-	'neadmin':'1',
-	'root':'2'
+    'Jack': '12345',
+    'Mary': '54321',
 }
 
 
 @app.route("/")
 def hello_view():
-	return{}
+    return "<h1>Welcome to Python messenger!</h1>"
+
 
 @app.route("/status")
 def status_view():
@@ -28,13 +27,16 @@ def status_view():
         'time': datetime.now().strftime('%d/%m/%Y %H:%M:%S')
     }
 
+
 @app.route("/users")
 def users_view():
     return {'users': users}
 
+
 @app.route("/last_message")
 def last_message_view():
     return {'messages': messages}
+
 
 @app.route("/messages")
 def messages_view():
@@ -50,7 +52,7 @@ def messages_view():
     """
     after = float(request.args['after'])
     username = request.args['username']
-    if username == 'admin':
+    if username =="admin":
         new_messages = [message for message in messages if message['time'] > after]
     else:
         new_messages = [message for message in messages if message['time'] > after and (message['username'] == username or message['username'] == 'admin')]
