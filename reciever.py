@@ -3,6 +3,7 @@ from datetime import datetime
 
 import requests
 domen = "http://5.53.124.89"
+# domen = "http://localhost"
 last_time = 0
 
 response = requests.get(domen + ":5000/status")

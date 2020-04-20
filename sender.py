@@ -4,7 +4,7 @@ from datetime import datetime
 import threading
 
 domen = "http://5.53.124.89"
-
+# domen = "http://localhost"
 response = requests.get(domen + ":5000/status")
 print(response.text)
 
