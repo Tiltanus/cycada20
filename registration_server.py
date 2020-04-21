@@ -17,7 +17,7 @@ messages = [
     'neadmin': '1',
     'root': '2'
 """
-users = {'SYSTEM': 't6q79uct'}
+users = {}
 
 file = open("login.txt", "r")
 for line in file:
