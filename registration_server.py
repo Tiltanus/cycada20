@@ -7,7 +7,7 @@ from flask import Flask, request
 app = Flask(__name__)
 port_id = 5000
 messages = [
-    {"username": "SYSTEM", "text": "Вы были успешно зарегестрированы.", "time": time.time()},
+    {"username": "SYSTEM", "text": "Вы были успешно зарегистрированы.", "time": time.time()},
     {"username": "SYSTEM", "text": "Ждите дальнейших указаний в группе ИИТиАД ИРНИТУ", "time": time.time()},
 ]
 
