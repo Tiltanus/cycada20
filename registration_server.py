@@ -21,7 +21,7 @@ users = {}
 
 file = open("login.txt", "r")
 for line in file:
-    key, *value = line.split()
+    key, *value = line.split(':')
     users[key] = value
 file.close()
 
@@ -83,7 +83,7 @@ def auth_view():
     if username not in users:
         users[username] = password
         file = open("login.txt", 'a')
-        file.write('\n' + username + ' ' + password)
+        file.write('\n' + username + ':' + password)
         file.close()
         return {"ok": True}
     else:
