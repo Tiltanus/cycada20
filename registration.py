@@ -66,7 +66,6 @@ for message in messages:
     print()
 
     last_time = message["time"]
-print("Нажмите любую клавишу, чтобы закрыть окно")
-input()
+input("Нажмите Enter чтобы закрыть окно")
 exit()
 # TODO: распараллелить аутентификацию
