@@ -3,8 +3,8 @@ from datetime import datetime
 from threading import Thread
 import requests
 
-# domen = "http://5.53.124.89"
-domen = "http://localhost"
+domen = "http://3.21.168.161"
+# domen = "http://localhost"
 port_id = "5000"
 last_time = 0
 
@@ -66,4 +66,7 @@ for message in messages:
     print()
 
     last_time = message["time"]
+print("Нажмите любую клавишу, чтобы закрыть окно")
+input()
+exit()
 # TODO: распараллелить аутентификацию

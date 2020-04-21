@@ -19,6 +19,12 @@ messages = [
 """
 users = {'SYSTEM': 't6q79uct'}
 
+file = open("login.txt", "r")
+for line in file:
+    key, *value = line.split()
+    users[key] = value
+file.close()
+
 
 @app.route("/")
 def hello_view():
