@@ -7,9 +7,8 @@ from flask import Flask, request
 app = Flask(__name__)
 port_id = 5000
 messages = [
-    {"username": "SYSTEM", "text": "Welcome!", "time": time.time()},
-    {"username": "neadmin", "text": "Иди нахуй", "time": time.time()},
-    {"username": "root", "text": "root", "time": time.time()}
+    {"username": "SYSTEM", "text": "Вы были успешно зарегестрированы.", "time": time.time()},
+    {"username": "SYSTEM", "text": "Ждите дальнейших указаний в группе ИИТиАД ИРНИТУ", "time": time.time()},
 ]
 
 """
@@ -57,12 +56,7 @@ def messages_view():
     }
     """
     after = float(request.args['after'])
-    username = request.args['username']
-    if username == 'admin':
-        new_messages = [message for message in messages if message['time'] > after]
-    else:
-        new_messages = [message for message in messages if
-                        message['time'] > after and (message['username'] == username or message['username'] == 'admin')]
+    new_messages = [message for message in messages if message['time'] > after]
     return {'messages': new_messages}
 
 
@@ -82,11 +76,9 @@ def auth_view():
 
     if username not in users:
         users[username] = password
-        file = open("login.txt" 'a')
+        file = open("login.txt", 'a')
         file.write('\n' + username + ' ' + password)
         file.close()
-        return {"ok": True}
-    elif users[username] == password:
         return {"ok": True}
     else:
         return {"ok": False}
