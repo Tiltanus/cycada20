@@ -3,16 +3,16 @@ from datetime import datetime
 from threading import Thread
 import requests
 
-domen = "http://18.222.169.160"
-# domen = "http://localhost"
+# domen = "http://18.222.169.160"
+domen = "http://localhost"
 port_id = "5000"
 last_time = 0
 
 
-def auth_request(username, password):
+def auth_request(username, password, vk):
     response = requests.post(
         domen + ':' + port_id + "/auth",
-        json={"username": username, "password": password}
+        json={"username": username, "password": password, "vk": vk}
     )
     return response
 
@@ -32,14 +32,20 @@ else:
     time.sleep(1)
     exit(0)
 
+print("Project CHARON. Пожалуйста, зарегистрируйтесь.")
+print("Все поля являются обязательными.")
 print("Введите имя:")
 username = input()
 
 print("Введите пароль:")
 password = input()
 
+print("Ссылка на вашу страницу необходима для подтверждения вашей личности")
+print("Введите ссылку на вашу страницу VK:")
+vk = input()
+
 print("Дождитесь ответа от сервера!")
-response = auth_request(username, password)
+response = auth_request(username, password, vk)
 
 if not response.json()['ok']:
     print('Имя занято, попробуйте ещё раз')
@@ -49,8 +55,12 @@ while not response.json()['ok']:
 
     print("Введите пароль:")
     password = input()
+
+    print("Введите вашу ссылку VK:")
+    vk = input()
+
     print("Дождитесь ответа от сервера!")
-    response = auth_request(username, password)
+    response = auth_request(username, password, vk)
     if not response.json()['ok']:
         print('Имя занято')
 

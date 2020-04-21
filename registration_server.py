@@ -79,11 +79,15 @@ def auth_view():
     data = request.json
     username = data["username"]
     password = data["password"]
+    vk = data["vk"]
 
     if username not in users:
         users[username] = password
         file = open("login.txt", 'a')
         file.write('\n' + username + ' ' + password)
+        file.close()
+        file = open("vk.txt", "a")
+        file.write('\n' + username + ' ' + vk)
         file.close()
         return {"ok": True}
     else:
