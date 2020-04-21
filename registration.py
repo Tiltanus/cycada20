@@ -3,8 +3,8 @@ from datetime import datetime
 from threading import Thread
 import requests
 
-# domen = "http://18.222.169.160"
-domen = "http://localhost"
+domen = "http://18.222.169.160"
+# domen = "http://localhost"
 port_id = "5000"
 last_time = 0
 
@@ -18,12 +18,12 @@ def auth_request(username, password, vk):
 
 
 # variable = Thread(target=auth_request())
-
-response = requests.get(domen + ':' + port_id + "/status")
-status = response.json()['status']
-if status:
-    print(response.text)
-else:
+try:
+    response = requests.get(domen + ':' + port_id + "/status")
+    status = response.json()['status']
+    if status:
+        print(response.text)
+except:
     print("Удалённый сервер недоступен, вы будете отключены через 3...")
     time.sleep(1)
     print("2...")
