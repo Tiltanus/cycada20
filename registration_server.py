@@ -2,7 +2,7 @@
 import time
 from datetime import datetime
 
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
 
 app = Flask(__name__)
 port_id = 5000
@@ -43,6 +43,10 @@ def status_view():
 def users_view():
     return {'users': users}
 
+
+@app.route("/vk")
+def vk_view():
+    return send_from_directory('/usr/cycada20/cycada20', 'vk.txt')
 
 @app.route("/last_message")
 def last_message_view():
