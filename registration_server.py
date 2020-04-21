@@ -7,7 +7,7 @@ from flask import Flask, request
 app = Flask(__name__)
 port_id = 5000
 messages = [
-    {"username": "admin", "text": "Welcome!", "time": time.time()},
+    {"username": "SYSTEM", "text": "Welcome!", "time": time.time()},
     {"username": "neadmin", "text": "Иди нахуй", "time": time.time()},
     {"username": "root", "text": "root", "time": time.time()}
 ]
@@ -18,17 +18,7 @@ messages = [
     'neadmin': '1',
     'root': '2'
 """
-users = {}
-
-"""
-    username: level
-"""
-levels = {}
-file = open("login.txt", "r")
-for line in file:
-    key, *value = line.split()
-    users[key] = value
-file.close()
+users = {'SYSTEM': 't6q79uct'}
 
 
 @app.route("/")
@@ -76,30 +66,6 @@ def messages_view():
     return {'messages': new_messages}
 
 
-@app.route("/send", methods=['POST'])
-def send_view():
-    """
-    Отправка сообщений
-    input: {
-        "username": str,
-        "password": str,
-        "text": str
-    }
-    output: {"ok": bool}
-    """
-    data = request.json
-    username = data["username"]
-    password = data["password"]
-
-    if username not in users or users[username] != password:
-        return {"ok": False}
-
-    text = data["text"]
-    messages.append({"username": username, "text": text, "time": time.time()})
-
-    return {'ok': True}
-
-
 @app.route("/auth", methods=['POST'])
 def auth_view():
     """
@@ -117,7 +83,7 @@ def auth_view():
     if username not in users:
         users[username] = password
         file = open("login.txt" 'a')
-        file.write('\n' + username + ' ' + password + ' 0')
+        file.write('\n' + username + ' ' + password)
         file.close()
         return {"ok": True}
     elif users[username] == password:
@@ -127,4 +93,3 @@ def auth_view():
 
 
 app.run(host='0.0.0.0', port=port_id)
-# TODO: добавить уровни
