@@ -41,7 +41,7 @@ def status_view():
 
 @app.route("/users")
 def users_view():
-    return {'users': users}
+    return send_from_directory('/usr/cycada20/cycada20', 'login.txt')
 
 
 @app.route("/vk")
