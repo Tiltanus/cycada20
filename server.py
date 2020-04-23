@@ -1,29 +1,16 @@
 #!/usr/bin/env python3
 import time
 from datetime import datetime
-
+import codecs
 from flask import Flask, request
 
 app = Flask(__name__)
 port_id = 5000
-messages = [
-    {"username": "admin", "text": "Welcome!", "time": time.time()},
-    {"username": "neadmin", "text": "Иди нахуй", "time": time.time()},
-    {"username": "root", "text": "root", "time": time.time()}
-]
-
-"""
-    username:password
-    'admin': 't6q79uct',
-    'neadmin': '1',
-    'root': '2'
-"""
-users = {}
-
-"""
-    username: level
-"""
-levels = {}
+level = 0
+sended = False
+level_change = False
+users = {'root': '2'}
+messages = []
 file = open("login.txt", "r")
 for line in file:
     key, *value = line.split()
@@ -31,49 +18,77 @@ for line in file:
 file.close()
 
 
+def bad_answer():
+    global sended
+    sended = True
+    messages.clear()
+    messages.append({"username": "SYSTEM", 'text': 'Ответ неверный', 'time': time.time()})
+
+
+def good_answer():
+    global sended
+    sended = True
+    global level
+    level += 1
+    global level_change
+    level_change = True
+    messages.clear()
+    messages.append({"username": "SYSTEM", 'text': 'Ответ принят', 'time': time.time()})
+
+
+def messages_for_current_task():
+    task = []
+    file = codecs.open("./levels/" + str(level) + "/" + str(level) + "_task.txt", "r", "utf-8")
+    for line in file.readlines():
+        task.append({'username': 'SYSTEM', 'text': line, 'time': time.time()})
+    return task
+
+
+def hint_for_current_task():
+    global sended
+    sended = True
+    messages.clear()
+    file = codecs.open("./levels/" + str(level) + "/" + str(level) + "_hint.txt", "r", "utf-8")
+    for line in file.readlines():
+        messages.append({'username': 'SYSTEM', 'text': line, 'time': time.time()})
+
+
+def answer_for_current_task():
+    answer = []
+    file = codecs.open("./levels/" + str(level) + "/" + str(level) + "_answer.txt", "r", "utf-8")
+    for line in file.readlines():
+        answer.append(line)
+    return answer
+
+
 @app.route("/")
 def hello_view():
-    return {}
+    return {'answer': sended}
 
 
 @app.route("/status")
 def status_view():
     return {
         'status': True,
-        'time': datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+        'time': datetime.now().strftime('%d/%m/%Y %H:%M:%S'),
+        'level': level
     }
 
 
-@app.route("/users")
-def users_view():
-    return {'users': users}
-
-
-@app.route("/last_message")
-def last_message_view():
-    return {'messages': messages}
+@app.route("/task")
+def task_0():
+    global sended
+    sended = False
+    global level_change
+    level_change = False
+    return {'messages': messages_for_current_task()}
 
 
 @app.route("/messages")
 def messages_view():
-    """
-    Получение сообщений после отметки after
-    input: after - отметка времени
-    output: {
-        "messages": [
-            {"username": str, "text": str, "time": float},
-            ...
-        ]
-    }
-    """
-    after = float(request.args['after'])
-    username = request.args['username']
-    if username == 'admin':
-        new_messages = [message for message in messages if message['time'] > after]
-    else:
-        new_messages = [message for message in messages if
-                        message['time'] > after and (message['username'] == username or message['username'] == 'admin')]
-    return {'messages': new_messages}
+    global sended
+    sended = False
+    return {'messages': messages, 'level++': level_change}
 
 
 @app.route("/send", methods=['POST'])
@@ -93,11 +108,15 @@ def send_view():
 
     if username not in users or users[username] != password:
         return {"ok": False}
-
-    text = data["text"]
-    messages.append({"username": username, "text": text, "time": time.time()})
-
-    return {'ok': True}
+    if data["text"] == 'hint':
+        hint_for_current_task()
+    else:
+        text = data["text"]
+        if text in answer_for_current_task():
+            good_answer()
+        else:
+            bad_answer()
+        return {'ok': True}
 
 
 @app.route("/auth", methods=['POST'])
@@ -115,11 +134,7 @@ def auth_view():
     password = data["password"]
 
     if username not in users:
-        users[username] = password
-        file = open("login.txt" 'a')
-        file.write('\n' + username + ' ' + password + ' 0')
-        file.close()
-        return {"ok": True}
+        return {"ok": False}
     elif users[username] == password:
         return {"ok": True}
     else:

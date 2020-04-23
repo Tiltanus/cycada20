@@ -3,8 +3,8 @@ from datetime import datetime
 from threading import Thread
 import requests
 
-domen = "http://18.222.169.160"
-# domen = "http://localhost"
+# domen = "http://18.222.169.160"
+domen = "http://localhost"
 port_id = "5000"
 last_time = 0
 
