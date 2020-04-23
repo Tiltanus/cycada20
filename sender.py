@@ -45,7 +45,7 @@ while True:
             domen + port_id + "/send",
             json={"username": username, "password": password, "text": text}
         )
-            print()
-        except ConnectionError:
-            print("Попытка соединения не удалась")
-            print()
+        print()
+    except ConnectionError:
+        print("Попытка соединения не удалась")
+        print()
